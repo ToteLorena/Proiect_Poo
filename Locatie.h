@@ -72,6 +72,11 @@ public:
 	//DESTRUCTOR
 	~Locatie()
 	{
+		if(this->denumireaLocatiei != nullptr)
+		{
+			delete[]this->denumireaLocatiei;
+		}
+		
 		if (this->adresa != nullptr)
 		{
 			delete[]this->adresa;
@@ -88,7 +93,8 @@ public:
 	{
 		this->adresa = new char[strlen(l.adresa) + 1];
 		strcpy_s(this->adresa, strlen(l.adresa) + 1, l.adresa);
-		this->denumireaLocatiei = l.denumireaLocatiei;
+		this->denumireaLocatiei = new char[strlen(l.denumireaLocatiei) + 1];
+		strcpy_s(this->denumireaLocatiei, strlen(l.denumireaLocatiei) + 1, l.denumireaLocatiei);
 		if (nrLocuri > 0 && nrRanduri > 0 && locuriLocatie != nullptr)
 		{
 			this->nrRanduri = l.nrRanduri;
@@ -120,9 +126,25 @@ public:
 	{
 		if (this != &l)
 		{
+			if(this->denumireaLocatiei != nullptr)
+		{
+			delete[]this->denumireaLocatiei;
+		}
+		
+		if (this->adresa != nullptr)
+		{
+			delete[]this->adresa;
+		}
+
+		if (this->locuriLocatie != nullptr)
+		{
+			delete[]this->locuriLocatie;
+		}
+			
 			this->adresa = new char[strlen(l.adresa) + 1];
 			strcpy_s(this->adresa, strlen(l.adresa) + 1, l.adresa);
-			this->denumireaLocatiei = l.denumireaLocatiei;
+			this->denumireaLocatiei = new char[strlen(l.denumireaLocatiei) + 1];
+		        strcpy_s(this->denumireaLocatiei, strlen(l.denumireaLocatiei) + 1, l.denumireaLocatiei);
 			for (int i = 0; i < l.nrRanduri; i++)
 			{
 				locuriLocatie[i] = new int[l.nrLocuri];
@@ -190,6 +212,10 @@ public:
 		{
 			this->denumireaLocatiei = denumireaLocatiei;
 		}
+		else
+		{
+			this->denumireaLocatiei=nullptr;
+		}
 	}
 
 	void setAdresa(char* adresa)
@@ -254,14 +280,22 @@ public:
 		{
 			delete[]l.locuriLocatie;
 		}
+		
+		if (this->locuriLocatie != nullptr)
+		{
+			delete[]this->locuriLocatie;
+		}
 
 		cout << "Introduceti denumirea locatiei:";
-		in >> l.denumireaLocatiei;
+		char aux1[150];
+		in >> aux1;
+		l.denumireaLocatiei = new char[strlen(aux1) + 1];
+		strcpy_s(l.denumireaLocatiei, strlen(aux1) + 1, aux1);
 		cout << "Introduceti adresa: ";
-		char aux[150];
-		in >> aux;
-		l.adresa = new char[strlen(aux) + 1];
-		strcpy_s(l.adresa, strlen(aux) + 1, aux);;
+		char aux2[150];
+		in >> aux2;
+		l.adresa = new char[strlen(aux2) + 1];
+		strcpy_s(l.adresa, strlen(aux2) + 1, aux2);
 		cout << "Introduceti numarul de randuri:";
 		in >> l.nrRanduri;
 		cout << "Introduceti numarul de locuri:";
