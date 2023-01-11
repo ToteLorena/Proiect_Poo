@@ -264,7 +264,17 @@ public:
 		out << "Adresa este: " << l.adresa << endl;
 		out << "Numarul de randuri: " << l.nrRanduri << endl;
 		out << "Numarul de locuri rand:" << l.nrLocuri << endl;
-		out << "1-Loc ocupat, 0-Loc Liber, 2-Loc Rezervat:" << l.locuriLocatie << endl;
+		out << "1-Loc ocupat, 0-Loc Liber, 2-Loc Rezervat:"<<endl;
+		for (int i = 0; i < l.nrRanduri; i++)
+		{
+			for (int j = 0; j < l.nrLocuri; j++)
+			{
+				out << l.locuriLocatie[i][j]<<" ";
+			}
+			cout << endl;
+			
+		}
+		cout << endl;
 		return out;
 	}
 
