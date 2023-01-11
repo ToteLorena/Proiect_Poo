@@ -268,18 +268,11 @@ public:
 		cout << "Introduceti denumirea evenimentului:";
 		in >> e.nume;
 		cout << "Iroduceti data evenimentului in format zz-ll-aaaa:";
-		if (e.data[0] > 0 && e.data[0] <= 31 && e.data[1] > 0 && e.data[1] <= 12)
-		{
 				in>>e.data[0];
 				cout << "-";
 				in >> e.data[1];
 				cout << "-";
 				in >> e.data[2];
-		}
-		else
-		{
-			cout << "Eroare! Data introdusa este gresita.";
-		}
 		cout << "Introduceti ora evenimentului in format oo:mm:";
 		if (e.ora[0] <= 24 && e.ora[1] <= 59)
 		{
