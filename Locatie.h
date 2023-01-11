@@ -89,76 +89,74 @@ public:
 	}
 
 	//CONSTRUCTOR DE COPIERE
-	Locatie(const Locatie& l)
+		Locatie(const Locatie& l)
 	{
-		this->adresa = new char[strlen(l.adresa) + 1];
-		strcpy_s(this->adresa, strlen(l.adresa) + 1, l.adresa);
 		this->denumireaLocatiei = new char[strlen(l.denumireaLocatiei) + 1];
 		strcpy_s(this->denumireaLocatiei, strlen(l.denumireaLocatiei) + 1, l.denumireaLocatiei);
-		if (nrLocuri > 0 && nrRanduri > 0 && locuriLocatie != nullptr)
-		{
+
+		this->adresa = new char[strlen(l.adresa) + 1];
+		strcpy_s(this->adresa, strlen(l.adresa) + 1, l.adresa);
+
 			this->nrRanduri = l.nrRanduri;
 			this->nrLocuri = l.nrLocuri;
-			this->locuriLocatie = new int* [l.nrRanduri];
+			this->locuriLocatie = new int* [this->nrRanduri];
 
-			for (int i = 0; i < l.nrRanduri; i++)
+			for (int i = 0; i < this->nrRanduri; i++)
 			{
-				locuriLocatie[i] = new int[l.nrLocuri];
+				this->locuriLocatie[i] = new int[l.nrLocuri];
+			}
 
-				for (int j = 0; j < l.nrLocuri; j++)
+			for (int i = 0; i < this->nrRanduri; i++)
+			{
+				for (int j = 0; j < this->nrLocuri; j++)
 				{
-					if (l.locuriLocatie[i][j] == 1 || l.locuriLocatie[i][j] == 0 || l.locuriLocatie[i][j] == 2)
-					{
 						this->locuriLocatie[i][j] = l.locuriLocatie[i][j];
-					}
-					else
-					{
-						this->locuriLocatie[i][j] = 0;
-					}
+					
 				}
 			}
-		}
-
 	}
+
 
 	//OPERATOR DE ATRIBUIRE
 	Locatie& operator=(const Locatie& l)
 	{
-		if (this != &l)
-		{
-			if(this->denumireaLocatiei != nullptr)
-		{
-			delete[]this->denumireaLocatiei;
-		}
-		
 		if (this->adresa != nullptr)
 		{
 			delete[]this->adresa;
 		}
-
+		if (this->denumireaLocatiei != nullptr)
+		{
+			delete[]this->denumireaLocatiei;
+		}
 		if (this->locuriLocatie != nullptr)
 		{
 			delete[]this->locuriLocatie;
 		}
-			
+
+		if (this != &l)
+		{
+
+			this->denumireaLocatiei = new char[strlen(l.denumireaLocatiei) + 1];
+			strcpy_s(this->denumireaLocatiei, strlen(l.denumireaLocatiei) + 1, l.denumireaLocatiei);
+
 			this->adresa = new char[strlen(l.adresa) + 1];
 			strcpy_s(this->adresa, strlen(l.adresa) + 1, l.adresa);
-			this->denumireaLocatiei = new char[strlen(l.denumireaLocatiei) + 1];
-		        strcpy_s(this->denumireaLocatiei, strlen(l.denumireaLocatiei) + 1, l.denumireaLocatiei);
-			for (int i = 0; i < l.nrRanduri; i++)
-			{
-				locuriLocatie[i] = new int[l.nrLocuri];
 
-				for (int j = 0; j < l.nrLocuri; j++)
+			this->nrRanduri = l.nrRanduri;
+			this->nrLocuri = l.nrLocuri;
+			this->locuriLocatie = new int* [this->nrRanduri];
+
+			for (int i = 0; i < this->nrRanduri; i++)
+			{
+				this->locuriLocatie[i] = new int[l.nrLocuri];
+			}
+
+			for (int i = 0; i < this->nrRanduri; i++)
+			{
+				for (int j = 0; j < this->nrLocuri; j++)
 				{
-					if (l.locuriLocatie[i][j] == 1 || l.locuriLocatie[i][j] == 0 || l.locuriLocatie[i][j] == 2)
-					{
-						this->locuriLocatie[i][j] = l.locuriLocatie[i][j];
-					}
-					else
-					{
-						this->locuriLocatie[i][j] = 0;
-					}
+					this->locuriLocatie[i][j] = l.locuriLocatie[i][j];
+
 				}
 			}
 		}
@@ -206,17 +204,20 @@ public:
 
 	int** getMatriceLocuriLocatie()
 	{
-		if (locuriLocatie != nullptr)
+	if (locuriLocatie != nullptr)
 		{
 			int** copy = new int* [nrRanduri];
 			for (int i = 0; i < nrRanduri; i++)
 			{
 				copy[i] = new int[nrLocuri];
-				for (int j = 0; j < nrLocuri; j++)
-				{
-					copy[i][j] = locuriLocatie[i][j];
-				}
 			}
+				for (int i = 0; i < nrRanduri; i++)
+				{
+					for (int j = 0; j < nrLocuri; j++)
+					{
+						copy[i][j]=locuriLocatie[i][j];
+					}
+				}
 			return copy;
 		}
 		else return nullptr;
@@ -230,14 +231,17 @@ public:
 		{
 			delete[]this->denumireaLocatiei;
 		}
-		if (denumireaLocatiei != nullptr)
+		
+		if(denumireaLocatiei!=nullptr)
 		{
-			this->denumireaLocatiei = denumireaLocatiei;
+	        this->denumireaLocatiei = new char[strlen(denumireaLocatiei) + 1];
+		strcpy_s(this->denumireaLocatiei, strlen(denumireaLocatiei) + 1, denumireaLocatiei);
 		}
 		else
 		{
-			this->denumireaLocatiei=nullptr;
+denumireaLocatiei = nullptr;
 		}
+		
 	}
 
 	void setAdresa(char* adresa)
@@ -246,14 +250,17 @@ public:
 		{
 			delete[]this->adresa;
 		}
-		if (adresa != nullptr)
+		
+		if(adresa!=nullptr)
 		{
-			this->adresa = adresa;
+		this->adresa = new char[strlen(adresa) + 1];
+		strcpy_s(this->adresa, strlen(adresa) + 1, adresa);
 		}
 		else
 		{
-			this->adresa = nullptr;
+			adresa=nullptr;
 		}
+		
 	}
 
 	void setLocuri(int nrRanduri, int nrLocuri, int** locuriLocatie)
@@ -262,19 +269,23 @@ public:
 		{
 			delete[]this->locuriLocatie;
 		}
+
 		if (nrLocuri > 0 && nrRanduri > 0 && locuriLocatie != nullptr)
 		{
 			this->nrRanduri = nrRanduri;
 			this->nrLocuri = nrLocuri;
-			this->locuriLocatie = new int* [nrRanduri];
+			this->locuriLocatie = new int* [this->nrRanduri];
 
-			for (int i = 0; i < nrRanduri; i++)
+			for (int i = 0; i < this->nrRanduri; i++)
 			{
-				locuriLocatie[i] = new int[nrLocuri];
+				this->locuriLocatie[i] = new int[nrLocuri];
+			}
 
-				for (int j = 0; j < nrLocuri; j++)
+			for (int i = 0; i < this->nrRanduri; i++)
+			{
+				for (int j = 0; j < this->nrLocuri; j++)
 				{
-					if (locuriLocatie[i][j] == 0 || locuriLocatie[i][j] == 1 || locuriLocatie[i][j] == 2)
+					if (locuriLocatie[i][j] == 1 || locuriLocatie[i][j] == 0 || locuriLocatie[i][j] == 2)
 					{
 						this->locuriLocatie[i][j] = locuriLocatie[i][j];
 					}
@@ -321,13 +332,14 @@ public:
 			delete[]l.locuriLocatie;
 		}
 		
-		if (this->locuriLocatie != nullptr)
+		if(l.denumireaLocatiei != nullptr)
 		{
-			delete[]this->locuriLocatie;
+			delete[]l.denumireaLocatiei;
 		}
-
+		
+	
 		cout << "Introduceti denumirea locatiei:";
-		char aux1[150];
+		char aux1[160];
 		in >> aux1;
 		l.denumireaLocatiei = new char[strlen(aux1) + 1];
 		strcpy_s(l.denumireaLocatiei, strlen(aux1) + 1, aux1);
@@ -343,14 +355,18 @@ public:
 
 		l.locuriLocatie = new int* [l.nrRanduri];
 
+		
 		for (int i = 0; i < l.nrRanduri; i++)
 		{
 			l.locuriLocatie[i] = new int[l.nrLocuri];
+		}
 
+		for (int i = 0; i < l.nrRanduri; i++)
+		{
 			for (int j = 0; j < l.nrLocuri; j++)
 			{
-				cout << "Introduceti 1,0 sau 2; 1-Loc ocupat, 0-Loc Liber, 2-Loc Rezervat:";
-				in >> l.locuriLocatie[i][j];
+					cout << "Introduceti 1,0 sau 2; 1-Loc ocupat, 0-Loc Liber, 2-Loc Rezervat:";
+					in >> l.locuriLocatie[i][j];
 			}
 		}
 		return in;
