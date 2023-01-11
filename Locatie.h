@@ -299,7 +299,7 @@ denumireaLocatiei = nullptr;
 	}
 
 	//OPERATOR <<
-	friend ostream& operator<<(ostream& out, Locatie& l)
+	friend ostream& operator<<(ostream& out,const Locatie& l)
 	{
 		out << "Denumirea locatiei este: " << l.denumireaLocatiei << endl;
 		out << "Adresa este: " << l.adresa << endl;
