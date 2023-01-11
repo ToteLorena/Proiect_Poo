@@ -168,12 +168,30 @@ public:
 	//GETTERI
 	char* getDenumireaLocatiei()
 	{
-		return denumireaLocatiei;
+		if (denumireaLocatiei != nullptr)
+		{
+			char*copy=new char[strlen(denumireaLocatiei) + 1];
+			strcpy_s(copy, strlen(denumireaLocatiei) + 1, denumireaLocatiei);
+			return copy;
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	char* getAdresa()
 	{
-		return this->adresa;
+		if (adresa != nullptr)
+		{
+			char* copy = new char[strlen(adresa) + 1];
+			strcpy_s(copy, strlen(adresa) + 1, adresa);
+			return copy;
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	int getLocuri()
