@@ -226,6 +226,10 @@ public:
 	//SETTERI
 	void setDenumireaLocatiei(char* denumireaLocatiei)
 	{
+		if (this->denumireaLocatiei != nullptr)
+		{
+			delete[]this->denumireaLocatiei;
+		}
 		if (denumireaLocatiei != nullptr)
 		{
 			this->denumireaLocatiei = denumireaLocatiei;
@@ -238,6 +242,10 @@ public:
 
 	void setAdresa(char* adresa)
 	{
+		if (this->adresa != nullptr)
+		{
+			delete[]this->adresa;
+		}
 		if (adresa != nullptr)
 		{
 			this->adresa = adresa;
@@ -250,6 +258,10 @@ public:
 
 	void setLocuri(int nrRanduri, int nrLocuri, int** locuriLocatie)
 	{
+		if(this->locuriLocatie != nullptr)
+		{
+			delete[]this->locuriLocatie;
+		}
 		if (nrLocuri > 0 && nrRanduri > 0 && locuriLocatie != nullptr)
 		{
 			this->nrRanduri = nrRanduri;
