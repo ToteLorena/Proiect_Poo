@@ -366,7 +366,7 @@ public:
 	}
 
 	//METODA ADAUGA LOC REZERVAT
-	void adaugaLocOcupat(int nrRandRez, int nrLocpeRandRez)
+	void adaugaLocRezervat(int nrRandRez, int nrLocpeRandRez)
 	{
 		if (nrRandRez <= nrRanduri && nrLocpeRandRez <= nrLocuri)
 		{
