@@ -165,20 +165,30 @@ public:
 		return nume;
 	}
 
-	int getData()
+	
+	int getDataZi()
 	{
-		for (int i = 0; i < 3; i++)
-		{
-			return data[i];
-		}
+	
+		return data[0];
+	}
+	int getDataLuna()
+	{
+
+		return data[1];
+	}
+	int getDataAn()
+	{
+
+		return data[2];
 	}
 
 	int getOra()
 	{
-		for (int j = 0; j < 2; j++)
-		{
-			return ora[j];
-		}
+		return this->ora[0];
+	}
+	int getMinute()
+	{
+		return this->ora[1];
 	}
 
 	Locatie getLocatie()
