@@ -2,6 +2,7 @@
 #include"Eveniment.h"
 #include"Locatie.h"
 #include<iostream>
+#include <fstream>
 #include<string>
 using namespace std;
 
@@ -383,7 +384,7 @@ bool Locatie::operator==(const Locatie& l)
 //METODA ADAUGA LOC OCUPAT
 void Locatie::adaugaLocOcupat(int nrRandOcupat, int nrLocpeRandOcupat)
 {
-	if (nrRandOcupat <= nrRanduri && nrLocpeRandOcupat <= nrLocuri)
+	if (nrRandOcupat <= nrRanduri && nrLocpeRandOcupat <= nrLocuri && locuriLocatie[nrRandOcupat][nrLocpeRandOcupat]==0)
 	{
 		locuriLocatie[nrRandOcupat][nrLocpeRandOcupat] = 1;
 
@@ -393,7 +394,7 @@ void Locatie::adaugaLocOcupat(int nrRandOcupat, int nrLocpeRandOcupat)
 //METODA ADAUGA LOC REZERVAT
 void Locatie::adaugaLocRezervat(int nrRandRez, int nrLocpeRandRez)
 {
-	if (nrRandRez <= nrRanduri && nrLocpeRandRez <= nrLocuri)
+	if (nrRandRez <= nrRanduri && nrLocpeRandRez <= nrLocuri && locuriLocatie[nrRandRez][nrLocpeRandRez] == 0)
 	{
 		locuriLocatie[nrRandRez][nrLocpeRandRez] = 2;
 
@@ -403,9 +404,145 @@ void Locatie::adaugaLocRezervat(int nrRandRez, int nrLocpeRandRez)
 //METODA SCHIMBA LOCUL IN LIBER
 void Locatie::locLiber(int nrRandLiber, int nrLocpeRandLiber)
 {
-	if (nrRandLiber <= nrRanduri && nrLocpeRandLiber <= nrLocuri)
+	if (nrRandLiber <= nrRanduri && nrLocpeRandLiber <= nrLocuri && locuriLocatie[nrRandLiber][nrLocpeRandLiber] != 0)
 	{
 		locuriLocatie[nrRandLiber][nrLocpeRandLiber] = 0;
 
 	}
 }
+
+//SCRIEREA IN FISIERE TEXT A OBIECTELOR
+ofstream& operator<<(ofstream& file, const Locatie& l)
+{
+	file << l.denumireaLocatiei << endl;
+	file << l.adresa << endl;
+	file << l.nrRanduri << endl;
+	file << l.nrLocuri << endl;
+	for (int i = 0; i < l.nrRanduri; i++)
+	{
+		for (int j = 0; j < l.nrLocuri; j++)
+		{
+			file << l.locuriLocatie[i][j] << endl;
+		}
+	}
+
+	return file;
+}
+
+//CITIREA DIN FISIERE TEXT A OBIECTELOR
+ ifstream& operator>> (ifstream& file, Locatie& l)
+{
+	 if (l.locuriLocatie != nullptr)
+	 {
+		 delete[]l.locuriLocatie;
+	 }
+
+	 char aux[100];
+	 file >> aux;
+	 l.denumireaLocatiei = new char[strlen(aux) + 1];
+	 strcpy(l.denumireaLocatiei, aux);
+
+	 char aux1[100];
+	 file >> aux1;
+	 l.adresa = new char[strlen(aux1) + 1];
+	 strcpy(l.adresa, aux1);
+
+	 file >> l.nrRanduri;
+	 file >> l.nrLocuri;
+
+
+	 l.locuriLocatie = new int* [l.nrRanduri];
+
+	 for (int i = 0; i < l.nrRanduri; i++)
+	 {
+		 l.locuriLocatie[i] = new int[l.nrLocuri];
+	 }
+
+	 for (int i = 0; i < l.nrRanduri; i++)
+	 {
+		 for (int j = 0; j < l.nrLocuri; j++)
+		 {
+			 file >> l.locuriLocatie[i][j];
+		 }
+	 }
+
+	 return file;
+
+}
+
+ //METODA DE SCRIERE IN FISIERE BINARE
+ void Locatie::scriereBinar(fstream& file)
+ {
+	 int nrLitereDenumireaLocatiei = strlen(denumireaLocatiei);
+	 file.write((char*)&nrLitereDenumireaLocatiei, sizeof(int));
+	 for (int i = 0; i < nrLitereDenumireaLocatiei; i++)
+	 {
+		 file.write((char*)&denumireaLocatiei[i], sizeof(char));
+	 }
+
+	 int nrLitereAdresa = strlen(adresa);
+	 file.write((char*)&nrLitereAdresa, sizeof(int));
+	 for (int i = 0; i < nrLitereAdresa; i++)
+	 {
+		 file.write((char*)&adresa[i], sizeof(char));
+	 }
+
+	 file.write((char*)&nrRanduri, sizeof(int));
+	 file.write((char*)&nrLocuri, sizeof(int));
+
+	 for (int i = 0; i < nrRanduri; i++)
+	 {
+		 for (int j = 0; j < nrLocuri; j++)
+		 {
+			 file.write((char*)&locuriLocatie[i][j], sizeof(int));
+		 }
+	 }
+ }
+
+ //METODA DE CITIRE IN FISIERE BINARE
+ void Locatie::citireBinar(fstream& file)
+ {
+	 if (this->locuriLocatie != nullptr)
+	 {
+		 delete[]this->locuriLocatie;
+	 }
+
+	 int nrLitereDenLocatiei=0;
+	 file.read((char*)&nrLitereDenLocatiei, sizeof(int));
+	 this->denumireaLocatiei = new char[nrLitereDenLocatiei + 1];
+	 for (int i = 0; i < nrLitereDenLocatiei; i++)
+	 {
+		 file.read((char*)&this->denumireaLocatiei[i], sizeof(char));
+	 }
+	 this->denumireaLocatiei[nrLitereDenLocatiei] = '\0';
+
+	 int nrLitereAdresa = 0;
+	 file.read((char*)&nrLitereAdresa, sizeof(int));
+	 this->adresa = new char[nrLitereAdresa + 1];
+	 for (int i = 0; i < nrLitereAdresa; i++)
+	 {
+		 file.read((char*)&this->adresa[i], sizeof(char));
+	 }
+	 this->adresa[nrLitereAdresa] = '\0';
+
+	 file.read((char*)&this->nrLocuri, sizeof(int));
+
+	 file.read((char*)&this->nrRanduri, sizeof(int));
+
+	 this->locuriLocatie = new int* [nrRanduri];
+	 for (int i = 0; i < nrRanduri; i++)
+	 {
+		 this->locuriLocatie[i] = new int[nrLocuri];
+	 }
+
+	 for (int i = 0; i < nrRanduri; i++)
+	 {
+		 for (int j = 0; j < nrLocuri; j++)
+		 {
+			 file.read((char*)&this->locuriLocatie[i][j], sizeof(int));
+		 }
+	 }
+ }
+
+
+
