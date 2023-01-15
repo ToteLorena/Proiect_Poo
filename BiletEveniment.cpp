@@ -4,6 +4,7 @@
 #include"Locatie.h"
 #include<iostream>
 #include<string>
+#include <fstream>
 #include<cstdlib>.
 
 using namespace std;
@@ -24,6 +25,7 @@ BiletEveniment::BiletEveniment():identificareBilet(0)
 BiletEveniment::BiletEveniment(const string tipZona, float pret, int nrRand, int nrLocPeRand, Eveniment evenimentBilet, bool esteDecontat, int identificareBilet) :identificareBilet(identificareBilet)
 {
 	identificareBilet = 1 + (rand() % 999999);
+	identificareBilet++;
 	this->tipZona = tipZona;
 	this->pret = pret;
 	this->nrRand = nrRand;
@@ -142,7 +144,7 @@ BiletEveniment::BiletEveniment(const BiletEveniment& b):identificareBilet(b.iden
 }
 
   //OPERATOR <<
-  ostream& operator<<(ostream& out, BiletEveniment& b)
+  ostream& operator<<(ostream& out,const BiletEveniment& b)
   {
 	  out << "Codul pentru identificarea biletului este: " << b.identificareBilet << endl;
 	  out << "Zona biletului este: " << b.tipZona << endl;;
@@ -204,7 +206,7 @@ BiletEveniment::BiletEveniment(const BiletEveniment& b):identificareBilet(b.iden
  {
 	 float pretTotal = 0;
 	 pretTotal = pret + b.pret;
-	 return pret;
+	 return pretTotal;
  }
 
  //METODA PRET BILET CU DISCOUNT
@@ -222,4 +224,73 @@ BiletEveniment::BiletEveniment(const BiletEveniment& b):identificareBilet(b.iden
 	 pretCuAsigurare = pret + pretAsigurare;
 	 return pretCuAsigurare;
  }
+
+ //SCRIEREA IN FISIERE TEXT A OBIECTELOR
+  ofstream& operator<<(ofstream& file, const BiletEveniment& b)
+ {
+	 file << b.identificareBilet << endl;
+	 file << b.tipZona << endl;
+	 file << b.pret << endl;
+	 file << b.nrRand << endl;
+	 file << b.nrLocPeRand << endl;
+	 file << b.evenimentBilet << endl;
+	 file <<b.esteDecontat<< endl;
+	 return file;
+ }
+
+  //CITIREA DIN FISIERE TEXT A OBIECTELOR
+  ifstream& operator>> (ifstream& file, BiletEveniment&b)
+  {
+
+	  file >> b.tipZona;
+	  file >> b.pret;
+	  file >> b.nrRand;
+	  file >>b.nrLocPeRand;
+	  file >> b.evenimentBilet;
+	  file >> b.esteDecontat;
+	  return file;
+  }
+
+  //METODA DE SCRIERE IN FISIERE BINARE
+  void BiletEveniment::scriereBinar(fstream& file)
+  {
+	  int nrLitereTipZona =tipZona.size();
+	  file.write((char*)&nrLitereTipZona, sizeof(int));
+	  file.write(tipZona.c_str(), nrLitereTipZona);
+
+	  file.write((char*)&pret, sizeof(float));
+
+	  file.write((char*)&nrRand, sizeof(int));
+
+	  file.write((char*)&nrLocPeRand, sizeof(int));
+
+	  this->evenimentBilet.scriereBinar(file);
+
+	  file.write((char*)&esteDecontat, sizeof(bool));
+  }
+
+  //METODA DE CITIRE IN FISIERE BINARE
+  void BiletEveniment::citireBinar(fstream& file)
+  {
+	  int nrLitereTipZona=0;
+	  file.read((char*)&nrLitereTipZona, sizeof(int));
+	  string aux;
+	  aux.resize(nrLitereTipZona);
+	  file.read((char*)aux.c_str(), nrLitereTipZona);
+	  tipZona = aux;
+
+	  file.read((char*)&pret, sizeof(float));
+
+	  file.read((char*)&nrRand, sizeof(int));
+
+	  file.read((char*)&nrLocPeRand, sizeof(int));
+
+	  this->evenimentBilet.citireBinar(file);
+
+	  file.read((char*)&esteDecontat, sizeof(bool));
+
+  }
+
+ 
+
 
