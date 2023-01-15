@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include"Eveniment.h"
 #include"Locatie.h"
+#include <fstream>
 #include<iostream>
 #include<string>
 using namespace std;
@@ -11,7 +12,7 @@ Eveniment::Eveniment()
 	this->nume = "Necunoscut";
 	for (int i = 0; i < 3; i++)
 	{
-		this->data[i] = 0;
+		this->dataEven[i] = 0;
 	}
 	for (int j = 0; j < 2; j++)
 	{
@@ -29,14 +30,14 @@ Eveniment::Eveniment(const string nume, int data[3], int ora[2], Locatie locatie
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			this->data[i] = data[i];
+			this->dataEven[i] = data[i];
 		}
 	}
 	else
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			this->data[i] = 0;
+			this->dataEven[i] = 0;
 		}
 		cout << "Eroare! Data introdusa nu este corecta.";
 	}
@@ -70,18 +71,18 @@ Eveniment::~Eveniment()
 Eveniment::Eveniment(const Eveniment& e)
 {
 	this->nume = e.nume;
-	if (e.data[0] > 0 && e.data[0] <= 31 && e.data[1] > 0 && e.data[1] <= 12)
+	if (e.dataEven[0] > 0 && e.dataEven[0] <= 31 && e.dataEven[1] > 0 && e.dataEven[1] <= 12)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			this->data[i] = e.data[i];
+			this->dataEven[i] = e.dataEven[i];
 		}
 	}
 	else
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			this->data[i] = 0;
+			this->dataEven[i] = 0;
 		}
 	}
 
@@ -111,18 +112,18 @@ Eveniment& Eveniment::operator=(const Eveniment& e)
 
 		this->nume = e.nume;
 
-		if (e.data[0] > 0 && e.data[0] <= 31 && e.data[1] > 0 && e.data[1] <= 12)
+		if (e.dataEven[0] > 0 && e.dataEven[0] <= 31 && e.dataEven[1] > 0 && e.dataEven[1] <= 12)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				this->data[i] = e.data[i];
+				this->dataEven[i] = e.dataEven[i];
 			}
 		}
 		else
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				this->data[i] = 0;
+				this->dataEven[i] = 0;
 			}
 		}
 
@@ -155,17 +156,17 @@ string Eveniment::getNume()
 int Eveniment::getDataZi()
 {
 
-	return data[0];
+	return dataEven[0];
 }
 int Eveniment::getDataLuna()
 {
 
-	return data[1];
+	return dataEven[1];
 }
 int Eveniment::getDataAn()
 {
 
-	return data[2];
+	return dataEven[2];
 }
 
 int Eveniment::getOra()
@@ -194,13 +195,13 @@ void Eveniment::setNume(string nume)
 	this->nume = nume;
 }
 
-void Eveniment::setData(int data[3])
+void Eveniment::setData(int dataEven[3])
 {
-	if (data[0] > 0 && data[0] <= 31 && data[1] > 0 && data[1] <= 12)
+	if (dataEven[0] > 0 && dataEven[0] <= 31 && dataEven[1] > 0 && dataEven[1] <= 12)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			this->data[i] = data[i];
+			this->dataEven[i] = dataEven[i];
 		}
 	}
 	else
@@ -208,7 +209,7 @@ void Eveniment::setData(int data[3])
 
 		for (int i = 0; i < 3; i++)
 		{
-			this->data[i] = 0;
+			this->dataEven[i] = 0;
 		}
 		cout << "Eroare! Data introdusa nu este corecta.";
 	}
@@ -250,7 +251,7 @@ ostream& operator<<(ostream& out, const Eveniment& e)
 	out << "Denumirea evenimentului: " << e.nume << endl;
 	out << "Eveniment pentru persoane peste 18 ani (1-DA; 0-NU): " << e.pentruMajori << endl;
 	out << "Data evenimentului in format zz-ll-aaaa: ";
-	out << e.data[0] << "-" << e.data[1] << "-" << e.data[2];
+	out << e.dataEven[0] << "-" << e.dataEven[1] << "-" << e.dataEven[2];
 	cout << endl;
 	out << "Ora evenimentului in format oo:mm: ";
 	out << e.ora[0] << ":" << e.ora[1] << endl;
@@ -266,9 +267,9 @@ istream& operator>>(istream& in, Eveniment& e)
 	cout << "Introduceti denumirea evenimentului:";
 	in >> e.nume;
 	cout << "Iroduceti data evenimentului in format zz-ll-aaaa:";
-	in >> e.data[0];
-	in >> e.data[1];
-	in >> e.data[2];
+	in >> e.dataEven[0];
+	in >> e.dataEven[1];
+	in >> e.dataEven[2];
 	cout << "Introduceti ora evenimentului in format oo:mm:";
 	if (e.ora[0] <= 24 && e.ora[1] <= 59)
 	{
@@ -292,13 +293,23 @@ istream& operator>>(istream& in, Eveniment& e)
 
 //OPERATOR !
 //Pentru a schimba daca evenimentul este pentru persoane peste 18 ani.
-//L-AM SCRIS IN HEADER
+void operator!(Eveniment& e)
+{
+	if (e.pentruMajori == 0)
+	{
+		e.pentruMajori = 1;
+	}
+	else
+	{
+		e.pentruMajori = 0;
+	}
+}
 
 //OPERATOR >=
 //Pentru a verifica daca un eveniment este in aceiasi data sau mai tarziu decat altul
 bool Eveniment::operator>=(const Eveniment& e)
 {
-	if (this->data[0] >= e.data[0] && this->data[1] >= data[1] && this->data[2] >= data[2])
+	if (this->dataEven[0] >= e.dataEven[0] && this->dataEven[1] >= dataEven[1] && this->dataEven[2] >= dataEven[2])
 	{
 		return 1;
 	}
@@ -313,7 +324,7 @@ void Eveniment::schimbareZi(int ziNoua)
 {
 	if (ziNoua > 0 && ziNoua <= 31)
 	{
-		this->data[0] = ziNoua;
+		this->dataEven[0] = ziNoua;
 	}
 	else
 	{
@@ -333,3 +344,73 @@ void Eveniment::schimbareOra(int oraNoua)
 		cout << "Eroare! Ora introdusa este gresita!";
 	}
 }
+
+//SCRIEREA IN FISIERE TEXT
+ofstream& operator<<(ofstream& file, const Eveniment& e)
+{
+	file << e.nume << endl;
+	file << e.dataEven << endl;
+	file << e.ora << endl;
+	file << e.locatie << endl;
+	file << e.pentruMajori << endl;
+	return file;
+}
+
+//CITIREA DIN FISIERE TEXT 
+ifstream& operator>> (ifstream& file, Eveniment& e)
+{
+	file >> e.nume;
+	file >> e.dataEven[0];
+	file >> e.dataEven[1];
+	file >> e.dataEven[2];
+	file >> e.ora[0];
+	file >> e.ora[1];
+	file >> e.locatie;
+	file >> e.pentruMajori;
+	return file;
+}
+
+// METODA DE SCRIERE IN FISIERE BINARE
+void Eveniment::scriereBinar(fstream& file)
+{
+	int nrLitereNume =nume.size();
+	file.write((char*)&nrLitereNume, sizeof(int));
+	file.write(nume.c_str(), nrLitereNume);
+
+	file.write((char*)&dataEven[0], sizeof(int));
+	file.write((char*)&dataEven[1], sizeof(int));
+	file.write((char*)&dataEven[2], sizeof(int));
+
+	file.write((char*)&ora[0], sizeof(int));
+	file.write((char*)&ora[1], sizeof(int));
+
+	this->locatie.scriereBinar(file);
+
+	file.write((char*)&pentruMajori, sizeof(bool));
+
+}
+
+//METODA DE CITIRE DIN FISIERE BINARE
+void Eveniment::citireBinar(fstream& file)
+{
+	int nrLitereNume=0;
+	file.read((char*)&nrLitereNume, sizeof(int));
+	string aux;
+	aux.resize(nrLitereNume);
+	file.read((char*)aux.c_str(), nrLitereNume);
+	nume = aux;
+
+	file.read((char*)&dataEven[0], sizeof(int));
+	file.read((char*)&dataEven[1], sizeof(int));
+	file.read((char*)&dataEven[2], sizeof(int));
+
+	file.read((char*)&ora[0], sizeof(int));
+	file.read((char*)&ora[1], sizeof(int));
+
+	this->locatie.citireBinar(file);
+
+	file.read((char*)&pentruMajori, sizeof(bool));
+}
+
+
+
