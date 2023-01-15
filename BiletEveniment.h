@@ -2,7 +2,8 @@
 #pragma once
 #include<iostream>
 #include<string>
-#include<cstdlib>.
+#include<cstdlib>
+#include <fstream>
 #include"Eveniment.h"
 
 using namespace std;
@@ -10,7 +11,7 @@ using namespace std;
 
 class BiletEveniment
 {
-private:
+protected:
 	const int identificareBilet;
 	string tipZona;
 	float pret;
@@ -56,10 +57,10 @@ public:
 	static void setProcentTVA(int procentTVA);
 
 	//OPERATOR <<
-	friend ostream& operator<<(ostream& out, BiletEveniment& b);
+	friend ostream& operator<<(ostream& out,const BiletEveniment& b);
 
 	//OPERATOR >>
-	friend istream& operator>>(istream& in, BiletEveniment& b);
+	friend istream& operator>>(istream& in,  BiletEveniment& b);
 
 	//METODA STATICA PENTRU CEL MAI IEFTIN BILET
 	static float celMaiIeftinBilet(BiletEveniment* vectorBilete, int nrBilete);
@@ -73,10 +74,26 @@ public:
 	float operator+(BiletEveniment& b);
 
 	//METODA PRET BILET CU DISCOUNT
-	float aplicareDiscount(float procentDiscount);
+	virtual float aplicareDiscount(float procentDiscount);
 	
 	//METODA PRET BILET CU ASIGURARE ( IN CAZUL IN CARE EVENIMENTUL SE ANULEAZA/ CUMPARATORUL NU MAI POATE AJUNGE BANII II SUNT RESTITUITI)
-	float pretBiletCuAsigurare(float pretAsigurare);
+	virtual float pretBiletCuAsigurare(float pretAsigurare);
+
+	//SCRIEREA IN FISIERE TEXT A OBIECTELOR
+	friend ofstream& operator<<(ofstream& file,  const BiletEveniment& b);
+
+	//CITIREA IN FISIERE TEXT
+	friend ifstream& operator>>(ifstream& file, BiletEveniment& b);
+
+	//METODA DE SCRIERE IN FISIERE BINARE
+	void scriereBinar(fstream& file);
+
+	//METODA DE CITIRE IN FISIERE BINARE
+	void citireBinar(fstream& file);
+
+
+
+
 
 };
 
