@@ -166,15 +166,3 @@ int main()
 	
 };
 
-eniment.h"
-#include"Locatie.h"
-#include<cstdlib>.
-
-
-using namespace std;
-
-int main()
-{
-
-};
-
