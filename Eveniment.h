@@ -2,6 +2,7 @@
 #pragma once
 #include<iostream>
 #include<string>
+#include <fstream>
 #include"Locatie.h"
 
 using namespace std;
@@ -10,7 +11,7 @@ using namespace std;
 class Eveniment {
 private:
 	string nume;
-	int data[3];
+	int dataEven[3];
 	int ora[2];
 	Locatie locatie;
 	bool pentruMajori;
@@ -19,7 +20,7 @@ public:
 	//CONSTRUCTORI
 	Eveniment();
 
-	Eveniment(const string nume, int data[3], int ora[2], Locatie locatie, bool pentruMajori);
+	Eveniment(const string nume, int dataEven[3], int ora[2], Locatie locatie, bool pentruMajori);
 
 	//DESTRUCTOR
 	~Eveniment();
@@ -42,7 +43,7 @@ public:
 
 	//SETTERI
 	void setNume(string nume);
-	void setData(int data[3]);
+	void setData(int dataEven[3]);
 	void setOra(int ora[2]);
 	void setLocatie(Locatie locatie);
 	void setPentruMajori(bool pentruMajori);
@@ -55,17 +56,7 @@ public:
 
 	//OPERATOR !
 	//Pentru a schimba daca evenimentul este pentru persoane peste 18 ani.
-	friend void operator!(Eveniment& e)
-	{
-		if (e.pentruMajori == 0)
-		{
-			e.pentruMajori = 1;
-		}
-		else
-		{
-			e.pentruMajori = 0;
-		}
-	}
+	friend void operator!(Eveniment& e);
 
 	//OPERATOR >=
 	//Pentru a verifica daca un eveniment este in aceiasi data sau mai tarziu decat altul
@@ -76,6 +67,20 @@ public:
 
 	//METODA SCHIMBA ORA DIN CADRUL EVENIMENTULUI
 	void schimbareOra(int oraNoua);
+
+	//SCRIEREA IN FISIERE TEXT 
+	friend ofstream& operator<<(ofstream& file, const Eveniment& e);
+
+	//CITIREA DIN FISIERE TEXT 
+	friend ifstream& operator>> (ifstream& file, Eveniment& e);
+
+	// METODA DE SCRIERE IN FISIERE BINARE
+	void scriereBinar(fstream& file);
+
+	//METODA DE CITIRE IN FISIERE BINARE
+	void citireBinar(fstream& file);
+
+
 
 
 };
